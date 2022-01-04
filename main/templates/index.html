@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>PLCP</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">PLCP</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin">Admin</a>
+      </li>
+      <!-- <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li> -->
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+    <!-- <form class="form-inline my-2 my-lg-0"> -->
+      <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
+      <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+    <!-- </form> -->
+  </div>
+</nav>
+<div class="container" style="padding:30px;">
+<table class="table" >
+  <thead>
+    <tr>
+      <th scope="col">TIME</th>
+      <th scope="col">VOLTAGE</th>
+      <th scope="col">CURRENT</th>
+      <th scope="col">POWER</th>
+    </tr>
+  </thead>
+  <tbody>
+  {%for i in data %}
+    <tr>
+      <th scope="row">{{i.dt}}</th>
+      <td>{{i.Voltage}}</td>
+      <td>{{i.Current}}</td>
+      <td>{{i.Power}}</td>
+    </tr>
+	{% endfor %}
+  </tbody>
+</table>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+     <p align="center">
+	<canvas id="Voltage" style="width:100%;max-width:700px;padding:20px;"></canvas>
+	</p>
+    </div>
+    <div class="col-sm">
+      <p align="center">
+	<canvas id="Current" style="width:100%;max-width:700px;padding:20px;"></canvas>
+
+	</p>
+    </div>
+    <div class="col-sm">
+      <p align="center">
+	<canvas id="Power" style="width:100%;max-width:700px;padding:20px;"></canvas>
+	</p>
+    </div>
+  </div>
+</div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+	</script>
+	<script>
+	var xValues = [];
+	{% for i in dtt %}
+		xValues.push(String("{{i}}"));
+		{% endfor %}
+
+		new Chart("Voltage", {
+		  type: "line",
+		  data: {
+			labels: xValues,
+			datasets: [{
+			  data:{{V}},
+			  borderColor: "red",
+			  fill: false
+			},]
+		  },
+		  options: {
+			legend: {display: false},
+			title: {
+      display: true,
+      text: "Voltage"
+    }
+		  }
+		});
+		
+		new Chart("Current", {
+		  type: "line",
+		  data: {
+			labels: xValues,
+			datasets: [{
+			  data: {{I}},
+			  borderColor: "blue",
+			  fill: false
+			}]
+		  },
+		  options: {
+			legend: {display: false},
+			title: {
+      display: true,
+      text: "Current"
+    }
+		  }
+		});
+		
+		
+		new Chart("Power", {
+		  type: "line",
+		  data: {
+			labels: xValues,
+			datasets: [{
+			  data: {{ P }},
+			  borderColor: "green",
+			  fill: false
+			},]
+		  },
+		  options: {
+			legend: {display: false},
+			title: {
+      display: true,
+      text: "Power"
+    }
+		  }
+		});
+		
+	</script>
+	
+	
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
+
