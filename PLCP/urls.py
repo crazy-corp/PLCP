@@ -23,6 +23,11 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("",views.index),
+    path("home",views.red),
+    path('2',views.load2,name="load2"),
+    path('3',views.load3,name="load3"),
+    path('4',views.load4,name="load4"),
+    path('data_csv',views.cs,name="csv"),
     path("transmit",views.transmit),
 
 ]

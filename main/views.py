@@ -5,7 +5,8 @@ from django.utils.timezone import get_current_timezone
 from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-
+from django.shortcuts import redirect , reverse
+import csv
 # Create your views here.
 def index(request):
 	data=plcp.objects.all().order_by('-pk')
@@ -20,6 +21,57 @@ def index(request):
 		P.append(i.Power)
 	return render(request,'index.html',{'data':data,'V':V,'I':I,'dtt':dtt,'P':P})
 
+def load2(request):
+	data=plcp.objects.all().order_by('-pk')
+	dtt=[]
+	V=[]
+	I=[]
+	P=[]
+	for i in data:
+		dtt.append(str(i.dt))
+		V.append(i.Voltage)
+		I.append(i.Current)
+		P.append(i.Power)
+	return render(request,'load2.html',{'data':data,'V':V,'I':I,'dtt':dtt,'P':P})
+
+def load3(request):
+	data=plcp.objects.all().order_by('-pk')
+	dtt=[]
+	V=[]
+	I=[]
+	P=[]
+	for i in data:
+		dtt.append(str(i.dt))
+		V.append(i.Voltage)
+		I.append(i.Current)
+		P.append(i.Power)
+	return render(request,'load3.html',{'data':data,'V':V,'I':I,'dtt':dtt,'P':P})
+
+def load4(request):
+	data=plcp.objects.all().order_by('-pk')
+	dtt=[]
+	V=[]
+	I=[]
+	P=[]
+	for i in data:
+		dtt.append(str(i.dt))
+		V.append(i.Voltage)
+		I.append(i.Current)
+		P.append(i.Power)
+	return render(request,'load4.html',{'data':data,'V':V,'I':I,'dtt':dtt,'P':P})
+
+def red(request):
+	return redirect('/')
+
+def cs(request):
+	response = HttpResponse(content_type='test/csv')
+	response['Content-Disposition']='attachment; filename = data1.csv'
+	data=plcp.objects.all().order_by('-pk')
+	writer =csv.writer(response)
+	writer.writerow(['DateTime','Voltage','Current','PF','Power'])
+	for i in data:
+		writer.writerow([str(i.dt),i.Voltage,i.Current,i.pf,i.Power])
+	return response
 @csrf_exempt
 def transmit(request):
     if request.method=="POST":
