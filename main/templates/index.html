@@ -50,10 +50,19 @@
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>
     </ul>
-    <label class="switch">
-  <input type="checkbox" checked>
-  <span class="slider round"></span>
-	</label>
+    {% if state == True %}
+    <a href="index_state">
+      <button type="button" class="btn btn-success">ON</button>
+
+
+    </a>
+  {% else %} 
+  <a href="index_state">
+    <button type="button" class="btn btn-danger">OFF</button>
+  </a>
+  {% endif %}
+
+
     <!-- <form class="form-inline my-2 my-lg-0"> -->
       <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
       <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->

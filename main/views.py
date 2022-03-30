@@ -1,15 +1,27 @@
 from django.shortcuts import render
 import requests 
-from main.models import plcp
+from main.models import plcp,plcp_state
 from django.utils.timezone import get_current_timezone
 from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.shortcuts import redirect , reverse
 import csv
 # Create your views here.
+
+def index_state(request):
+	state1=plcp_state.objects.get(id=1)
+	if(state1.state==True):
+		state1.state=False
+		state1.save()
+	else:
+		state1.state=True
+		state1.save()
+
+	return redirect("home")
 def index(request):
 	data=plcp.objects.all().order_by('-pk')
+	state1=plcp_state.objects.all().first().state
 	dtt=[]
 	V=[]
 	I=[]
@@ -19,7 +31,7 @@ def index(request):
 		V.append(i.Voltage)
 		I.append(i.Current)
 		P.append(i.Power)
-	return render(request,'index.html',{'data':data,'V':V,'I':I,'dtt':dtt,'P':P})
+	return render(request,'index.html',{'data':data,'V':V,'I':I,'dtt':dtt,'P':P,'state':state1})
 
 def load2(request):
 	data=plcp.objects.all().order_by('-pk')
@@ -72,6 +84,8 @@ def cs(request):
 	for i in data:
 		writer.writerow([str(i.dt),i.Voltage,i.Current,i.pf,i.Power])
 	return response
+
+
 @csrf_exempt
 def transmit(request):
     if request.method=="POST":
@@ -81,4 +95,5 @@ def transmit(request):
         I=request.POST.get("I")
         P=request.POST.get("P")
         plcp(dt=dt,Voltage=V,Current=I,Power=P).save()
-        return HttpResponse("SUCCESS")
+        state1=plcp_state.objects.all().first().state
+        return JsonResponse({"TransMit":"SUCCESS","state":state1})

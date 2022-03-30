@@ -7,4 +7,7 @@ class plcp(models.Model):
 	Current = models.IntegerField()
 	Power = models.IntegerField()
 	pf = models.DecimalField(max_digits=3,decimal_places=2,default=1.00)
+
+class plcp_state(models.Model):
+	state = models.BooleanField(default=True)
 	
